@@ -101,7 +101,6 @@ EOF
  `((list-ref . scheme#list-ref))
  (##sys#er-transformer
   (lambda (form r c)
-		(display 33)
 	(##core#inline "setpixel" (car (cdr form)) (car (cddr form)) (car (cdddr form)) (car (cddddr form)) (car (cdr (cddddr form))) (car (cddr (cddddr form)))  ))))
 
 
