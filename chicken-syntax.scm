@@ -52,6 +52,72 @@
 (set! ##sys#chicken.condition-macro-environment
   (let ((me0 (##sys#macro-environment)))
 
+
+
+
+
+
+(##sys#extend-macro-environment
+ 'define-constant
+ '()
+ (##sys#er-transformer
+  (lambda (form r c)
+    (##sys#check-syntax 'define-constant form '(_ variable _))
+    `(##core#define-constant ,@(cdr form)))))
+
+
+(foreign-declare #<<EOF
+#include <errno.h>
+#include <float.h>
+#include <stdio.h>
+#include <stdint.h>
+
+void (*cbforset)(int, int, int, int, int, int);
+
+void setpixelcb(void (*newcb)(int, int, int, int, int, int)) {
+	// printf("\n setpixelcb!!!!!!!! \n");
+	// cbforset = newcb;
+	void (*cbforset)(int, int, int, int, int, int) = newcb;
+}
+
+static C_word setpixel(int x, int y, int r, int g, int b, int a) {
+	//printf("\n setpixel!!!!!!!! \n");
+	// cbforset(x, y, (uint8_t)r, (uint8_t)b, (uint8_t)g, (uint8_t)a);
+	cbforset(x, y, r, b, g, a);
+	return C_fix(0);
+}
+
+EOF
+)
+
+
+
+(##sys#extend-macro-environment
+ 'set-pixels
+ `((list-ref . scheme#list-ref))
+ (##sys#er-transformer
+  (lambda (form r c)
+		display 33)
+      (##core#inline "setpixel" 1 2 3 4 5 6 )))
+	;   (##core#inline "setpixel" (car form) (car (cdr form)) (car (cddr form)) (car (cdddr form)) (car (cddddr form)) (car (cdr (cddddr form)))  )))
+
+
+
+(##sys#extend-macro-environment
+ 'set-pixel2
+ '()
+ (##sys#er-transformer
+  (lambda (form r c)
+    (##core#inline "setpixel" 1 2 3 4 5 6)
+	)))
+
+
+
+
+
+
+
+
 (##sys#extend-macro-environment
  'handle-exceptions
  `((call-with-current-continuation . scheme#call-with-current-continuation))
