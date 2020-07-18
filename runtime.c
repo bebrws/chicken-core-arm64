@@ -4823,8 +4823,8 @@ C_regparm C_word C_fcall C_execute_shell_command(C_word string)
   buf[ n ] = '\0';
   if (n != strlen(buf))
     barf(C_ASCIIZ_REPRESENTATION_ERROR, "system", string);
-
-  n = C_system(buf);
+  
+  // n = C_system(buf);
 
   if(buf != buffer) C_free(buf);
 

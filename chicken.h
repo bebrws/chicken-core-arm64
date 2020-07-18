@@ -1,3 +1,4 @@
+#include <stdint.h>
 /* chicken.h - General headerfile for compiler generated executables
 ;
 ; Copyright (c) 2008-2020, The CHICKEN Team
@@ -29,6 +30,8 @@
 
 #ifndef ___CHICKEN
 #define ___CHICKEN
+
+void setpixelcb(void (*newcb)(int, int, uint8_t, uint8_t, uint8_t, uint8_t));
 
 #define C_MAJOR_VERSION   5
 #define C_MINOR_VERSION   2
