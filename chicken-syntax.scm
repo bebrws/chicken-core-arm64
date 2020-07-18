@@ -66,16 +66,21 @@
     `(##core#define-constant ,@(cdr form)))))
 
 
+
+
+
+
 (foreign-declare #<<EOF
 #include <errno.h>
 #include <float.h>
 #include <stdio.h>
 #include <stdint.h>
+#include <time.h>
 
 void (*cbforset)(int, int, uint8_t, uint8_t, uint8_t, uint8_t);
 
 void setpixelcb(void (*newcb)(int, int, uint8_t, uint8_t, uint8_t, uint8_t)) {
-	printf("\n setpixelcb\n");
+	// printf("\n setpixelcb\n");
 	cbforset = newcb;
 }
 
@@ -84,16 +89,29 @@ static C_word setpixel(int x, int y, int r, int g, int b, int a) {
 	// (C_fix(C_uword)C_unfix(x))
 	// I believe to set a return value you would want to:
 	// (C_uword)C_fix(retValue)
-	printf("\n In setpizel about to call CALLBACK \n");
-	printf("\n\n in set pixel (%d %d) %d %d %d %d\n\n", (C_uword)C_unfix(x), (C_uword)C_unfix(y), (C_uword)C_unfix(r), (C_uword)C_unfix(g), (C_uword)C_unfix(b), (C_uword)C_unfix(a));
-	cbforset((uint8_t)C_unfix(x), (uint8_t)C_unfix(y), (uint8_t)C_unfix(r), (uint8_t)C_unfix(g), (uint8_t)C_unfix(b), (uint8_t)C_unfix(a));
-	// cbforset(x, y, r, b, g, a);
+	// printf("\n\n in set pixel (%d %d) %d %d %d %d\n\n", (C_uword)C_unfix(x), (C_uword)C_unfix(y), (C_uword)C_unfix(r), (C_uword)C_unfix(g), (C_uword)C_unfix(b), (C_uword)C_unfix(a));
+	cbforset(C_unfix(x), C_unfix(y), (uint8_t)C_unfix(r), (uint8_t)C_unfix(g), (uint8_t)C_unfix(b), (uint8_t)C_unfix(a));
 	return C_fix(0);
+}
+
+static C_word ssdelay(int sleepTime) {
+	printf("ssdelay got %d\n",C_unfix(sleepTime));
+	usleep(C_unfix(sleepTime));
+	C_fix(0);
 }
 
 EOF
 )
 
+
+
+(##sys#extend-macro-environment
+ 'ssdelay
+ `((list-ref . scheme#list-ref))
+ (##sys#er-transformer
+  (lambda (form r c)
+	(##core#inline "ssdelay" (car (cdr form)))
+	(car (cdr form)))))
 
 
 (##sys#extend-macro-environment
@@ -109,6 +127,8 @@ EOF
  (##sys#er-transformer
   (lambda (form r c)
 	(##core#inline "setpixel" -1 -1 0 0 0 0 ))))
+
+
 
 
 
