@@ -103,7 +103,12 @@ EOF
   (lambda (form r c)
 	(##core#inline "setpixel" (car (cdr form)) (car (cddr form)) (car (cdddr form)) (car (cddddr form)) (car (cdr (cddddr form))) (car (cddr (cddddr form)))  ))))
 
-
+(##sys#extend-macro-environment
+ 'clear-pixels
+ `((list-ref . scheme#list-ref))
+ (##sys#er-transformer
+  (lambda (form r c)
+	(##core#inline "setpixel" -1 -1 0 0 0 0 ))))
 
 
 
