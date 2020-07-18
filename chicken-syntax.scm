@@ -72,18 +72,17 @@
 #include <stdio.h>
 #include <stdint.h>
 
-void (*cbforset)(int, int, int, int, int, int);
+void (*cbforset)(int, int, uint8_t, uint8_t, uint8_t, uint8_t);
 
-void setpixelcb(void (*newcb)(int, int, int, int, int, int)) {
-	// printf("\n setpixelcb!!!!!!!! \n");
-	// cbforset = newcb;
-	void (*cbforset)(int, int, int, int, int, int) = newcb;
+void setpixelcb(void (*newcb)(int, int, uint8_t, uint8_t, uint8_t, uint8_t)) {
+	printf("\n setpixelcb!!!!!!!! \n");
+	cbforset = newcb;
 }
 
 static C_word setpixel(int x, int y, int r, int g, int b, int a) {
-	//printf("\n setpixel!!!!!!!! \n");
-	// cbforset(x, y, (uint8_t)r, (uint8_t)b, (uint8_t)g, (uint8_t)a);
-	cbforset(x, y, r, b, g, a);
+	printf("\n In setpizel about to call CALLBACK!!!!!!!! \n");
+	cbforset(x, y, (uint8_t)r, (uint8_t)b, (uint8_t)g, (uint8_t)a);
+	// cbforset(x, y, r, b, g, a);
 	return C_fix(0);
 }
 
@@ -93,7 +92,7 @@ EOF
 
 
 (##sys#extend-macro-environment
- 'set-pixels
+ 'set-pixel
  `((list-ref . scheme#list-ref))
  (##sys#er-transformer
   (lambda (form r c)
