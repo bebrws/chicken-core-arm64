@@ -75,13 +75,18 @@
 void (*cbforset)(int, int, uint8_t, uint8_t, uint8_t, uint8_t);
 
 void setpixelcb(void (*newcb)(int, int, uint8_t, uint8_t, uint8_t, uint8_t)) {
-	printf("\n setpixelcb!!!!!!!! \n");
+	printf("\n setpixelcb\n");
 	cbforset = newcb;
 }
 
 static C_word setpixel(int x, int y, int r, int g, int b, int a) {
-	printf("\n In setpizel about to call CALLBACK!!!!!!!! \n");
-	cbforset(x, y, (uint8_t)r, (uint8_t)b, (uint8_t)g, (uint8_t)a);
+	// To get the values correct :
+	// (C_fix(C_uword)C_unfix(x))
+	// I believe to set a return value you would want to:
+	// (C_uword)C_fix(retValue)
+	printf("\n In setpizel about to call CALLBACK \n");
+	printf("\n\n in set pixel (%d %d) %d %d %d %d\n\n", (C_uword)C_unfix(x), (C_uword)C_unfix(y), (C_uword)C_unfix(r), (C_uword)C_unfix(g), (C_uword)C_unfix(b), (C_uword)C_unfix(a));
+	cbforset((uint8_t)C_unfix(x), (uint8_t)C_unfix(y), (uint8_t)C_unfix(r), (uint8_t)C_unfix(g), (uint8_t)C_unfix(b), (uint8_t)C_unfix(a));
 	// cbforset(x, y, r, b, g, a);
 	return C_fix(0);
 }
@@ -97,8 +102,10 @@ EOF
  (##sys#er-transformer
   (lambda (form r c)
 		(display 33)
-      (##core#inline "setpixel" 1 2 3 4 5 6 ))))
-	;   (##core#inline "setpixel" (car form) (car (cdr form)) (car (cddr form)) (car (cdddr form)) (car (cddddr form)) (car (cdr (cddddr form)))  )))
+    ; (##core#inline "setpixel" 1 2 3 4 5 6  ))))  
+	(##core#inline "setpixel" (car (cdr form)) (car (cddr form)) (car (cdddr form)) (car (cddddr form)) (car (cdr (cddddr form))) (car (cddr (cddddr form)))  ))))
+
+
 
 
 
