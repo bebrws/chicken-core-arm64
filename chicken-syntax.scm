@@ -102,15 +102,6 @@ EOF
 
 
 
-(##sys#extend-macro-environment
- 'set-pixel2
- '()
- (##sys#er-transformer
-  (lambda (form r c)
-    (##core#inline "setpixel" 1 2 3 4 5 6)
-	)))
-
-
 
 
 
