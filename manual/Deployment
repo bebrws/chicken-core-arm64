@@ -124,7 +124,7 @@ the library that is linked into plain CHICKEN-compiled applications:
   % cp $CHICKEN_BUILD/chicken.h .
   % cp $CHICKEN_BUILD/chicken-config.h .
   % cp $CHICKEN_BUILD/buildtag.h .
-  % gcc -Os -fomit-frame-pointer -DHAVE_CHICKEN_CONFIG_H hello.c \
+  % gcc -g -fomit-frame-pointer -DHAVE_CHICKEN_CONFIG_H hello.c \
     build-version.c eval.c expand.c internal.c library.c modules.c runtime.c \
     -o hello -lm
 

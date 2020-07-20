@@ -1948,6 +1948,66 @@ EOF
         ((not (number? x)) (##sys#error-bad-number x '/))
         (else (##sys#error-bad-number y '/))) )
 
+
+(foreign-declare #<<EOF
+#include <errno.h>
+#include <float.h>
+#include <stdio.h>
+#include <stdint.h>
+#include <time.h>
+
+void (*cbforset)(int, int, uint8_t, uint8_t, uint8_t, uint8_t);
+
+void setpixelcb(void (*newcb)(int, int, uint8_t, uint8_t, uint8_t, uint8_t)) {
+	// printf("\n setpixelcb\n");
+	cbforset = newcb;
+}
+
+C_word setpixel(C_word x, C_word y, C_word r, C_word g, C_word b, C_word a) {
+	// To get the values correct :
+	// (C_fix(C_uword)C_unfix(x))
+	// I believe to set a return value you would want to:
+	// (C_uword)C_fix(retValue)
+	// printf("\n\n in set pixel (%d %d) %d %d %d %d\n\n", (C_uword)C_unfix(x), (C_uword)C_unfix(y), (C_uword)C_unfix(r), (C_uword)C_unfix(g), (C_uword)C_unfix(b), (C_uword)C_unfix(a));
+	cbforset((int)C_unfix(x), (int)C_unfix(y), (uint8_t)C_unfix(r), (uint8_t)C_unfix(g), (uint8_t)C_unfix(b), (uint8_t)C_unfix(a));
+	return C_fix(0);
+}
+
+C_word ssdelay(int sleepTime) {
+	printf("ssdelay got %d\n",C_unfix(sleepTime));
+	usleep(C_unfix(sleepTime));
+	C_fix(0);
+}
+
+C_word bbtest(int sleepTime) {
+	printf("bbtest got %d\n",C_unfix(sleepTime));
+	C_fix(0);
+}
+
+EOF
+)
+
+
+(set! scheme#ssdelay
+  (lambda (x)
+    (##core#inline "ssdelay" x)
+  )
+)
+
+(set! scheme#set-pixel
+  (lambda (x y r g b a)
+	(print "\n\nin setpixel\n\n")
+    (##core#inline "setpixel" x y r g b a)
+  )
+)
+
+(set! scheme#clear-pixels
+  (lambda (x y r g b a)
+    (##core#inline "setpixel" -1 -1 0 0 0 0)
+  )
+)
+
+
 (set! scheme#floor
   (lambda (x)
     (cond ((exact-integer? x) x)

@@ -34,14 +34,14 @@ ARCH ?= $(shell sh $(SRCDIR)/config-arch.sh)
 # options
 
 C_COMPILER = gcc
-C_COMPILER_OPTIONS ?= -fno-strict-aliasing -fwrapv -DHAVE_CHICKEN_CONFIG_H -maix64 -Os
+C_COMPILER_OPTIONS ?= -fno-strict-aliasing -fwrapv -DHAVE_CHICKEN_CONFIG_H -maix64 -g
 ifdef DEBUGBUILD
 C_COMPILER_OPTIMIZATION_OPTIONS ?= -g -Wall -Wno-unused
 else
 ifdef OPTIMIZE_FOR_SPEED
 C_COMPILER_OPTIMIZATION_OPTIONS ?= -O3 -fomit-frame-pointer
 else
-C_COMPILER_OPTIMIZATION_OPTIONS ?= -Os -fomit-frame-pointer
+C_COMPILER_OPTIMIZATION_OPTIONS ?= -g -fomit-frame-pointer
 endif
 endif
 

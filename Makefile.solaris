@@ -63,7 +63,7 @@ else
 ifeq ($(C_COMPILER),cc)
 C_COMPILER_OPTIMIZATION_OPTIONS += -g -xO3
 else
-C_COMPILER_OPTIMIZATION_OPTIONS ?= -Os -fomit-frame-pointer
+C_COMPILER_OPTIMIZATION_OPTIONS ?= -g -fomit-frame-pointer
 endif
 endif
 endif

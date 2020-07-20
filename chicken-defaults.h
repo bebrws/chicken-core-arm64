@@ -12,7 +12,7 @@
 # define C_INSTALL_RC_COMPILER ""
 #endif
 #ifndef C_INSTALL_CFLAGS
-# define C_INSTALL_CFLAGS "-fno-strict-aliasing -fwrapv -fno-common -DHAVE_CHICKEN_CONFIG_H -m64 -DC_ENABLE_PTABLES -Os -fomit-frame-pointer"
+# define C_INSTALL_CFLAGS "-fno-strict-aliasing -fwrapv -fno-common -DHAVE_CHICKEN_CONFIG_H -m64 -DC_ENABLE_PTABLES -g -fomit-frame-pointer"
 #endif
 #ifndef C_INSTALL_LDFLAGS
 # define C_INSTALL_LDFLAGS "-m64 "
@@ -72,7 +72,7 @@
 # define C_TARGET_INSTALL_PROGRAM "install"
 #endif
 #ifndef C_TARGET_CFLAGS
-# define C_TARGET_CFLAGS "-fno-strict-aliasing -fwrapv -fno-common -DHAVE_CHICKEN_CONFIG_H -m64 -DC_ENABLE_PTABLES -Os -fomit-frame-pointer"
+# define C_TARGET_CFLAGS "-fno-strict-aliasing -fwrapv -fno-common -DHAVE_CHICKEN_CONFIG_H -m64 -DC_ENABLE_PTABLES -g -fomit-frame-pointer"
 #endif
 #ifndef C_TARGET_LIBRARIAN_FLAGS
 # define C_TARGET_LIBRARIAN_FLAGS "scru"

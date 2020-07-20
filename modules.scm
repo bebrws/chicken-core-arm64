@@ -950,7 +950,7 @@
 	 (quotient . scheme#quotient) (remainder . scheme#remainder)
 	 (modulo . scheme#modulo)
 	 (gcd . scheme#gcd) (lcm . scheme#lcm) (abs . scheme#abs)
-	 (floor . scheme#floor) (ceiling . scheme#ceiling)
+	 (set-pixel . scheme#set-pixel) (clear-pixels . scheme#clear-pixels) (ssdelay . scheme#ssdelay) (floor . scheme#floor) (ceiling . scheme#ceiling)
 	 (truncate . scheme#truncate) (round . scheme#round)
 	 (rationalize . scheme#rationalize)
 	 (exact->inexact . scheme#exact->inexact)

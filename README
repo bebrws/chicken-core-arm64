@@ -628,7 +628,7 @@ _/        _/    _/    _/    _/        _/  _/    _/        _/    _/_/
 	    represent.  Adding support for IBM's XL C compiler may resolve this
 	    issue.
 
-	    Instructing gcc to optimize the size of generated code (-Os)
+	    Instructing gcc to optimize the size of generated code (-g)
 	    mitigates this to some degree, but very large C files may still be
 	    uncompilable.  This is known to affect the html-tags egg.
 

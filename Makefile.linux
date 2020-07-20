@@ -39,7 +39,7 @@ else
 ifdef OPTIMIZE_FOR_SPEED
 C_COMPILER_OPTIMIZATION_OPTIONS ?= -O3 -fomit-frame-pointer
 else
-C_COMPILER_OPTIMIZATION_OPTIONS ?= -Os -fomit-frame-pointer
+C_COMPILER_OPTIMIZATION_OPTIONS ?= -g -fomit-frame-pointer
 endif
 endif
 LINKER_LINK_SHARED_LIBRARY_OPTIONS = -shared
