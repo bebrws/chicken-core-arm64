@@ -1968,12 +1968,12 @@ C_word setpixel(C_word x, C_word y, C_word r, C_word g, C_word b, C_word a) {
 	// (C_fix(C_uword)C_unfix(x))
 	// I believe to set a return value you would want to:
 	// (C_uword)C_fix(retValue)
-	// printf("\n\n in set pixel (%d %d) %d %d %d %d\n\n", (C_uword)C_unfix(x), (C_uword)C_unfix(y), (C_uword)C_unfix(r), (C_uword)C_unfix(g), (C_uword)C_unfix(b), (C_uword)C_unfix(a));
+	printf("\n\n in set pixel (%d %d) %d %d %d %d\n\n", (C_uword)C_unfix(x), (C_uword)C_unfix(y), (C_uword)C_unfix(r), (C_uword)C_unfix(g), (C_uword)C_unfix(b), (C_uword)C_unfix(a));
 	cbforset((int)C_unfix(x), (int)C_unfix(y), (uint8_t)C_unfix(r), (uint8_t)C_unfix(g), (uint8_t)C_unfix(b), (uint8_t)C_unfix(a));
 	return C_fix(0);
 }
 
-C_word ssdelay(int sleepTime) {
+C_word ssdelay(C_word sleepTime) {
 	printf("ssdelay got %d\n",C_unfix(sleepTime));
 	usleep(C_unfix(sleepTime));
 	C_fix(0);
@@ -1988,6 +1988,47 @@ EOF
 )
 
 
+(define-syntax do-while
+  (syntax-rules ()
+    ((_ test? xpr xpr1 ...)
+     (let loop ()
+       (if test?
+         (begin
+           xpr xpr1 ...
+           (loop)))))))
+
+(define (neg-or-num-char? c) (or (and (>= (char->integer c) 48) (<= (char->integer c) 57)) (eq? (char->integer c) 45)))
+(define (num-char? c) (and (>= (char->integer c) 48) (<= (char->integer c) 57)))
+(define (char->num c) (- (char->integer c) 48))
+
+(define (my-to-integer num)
+  (let ((v 0)
+        (i 0)
+        (mcl (string->list (number->string (exact->inexact (round num)))))) 
+      (do-while (and (< i (length mcl)) (neg-or-num-char? (list-ref mcl i)))
+          (let ((c (list-ref mcl i))) 
+            (if (num-char? c) (set! v (+ (* v 10) (char->num c))))
+            (set! i (+ i 1))
+          )
+      )
+    (if (eq? #\- (car mcl)) (set! v (* v -1)))
+    (identity v)
+  )
+)
+
+
+(define (mk-valid-pixel-xy x)
+  (print "\n got: ")
+  (print x) 
+  (print "\n")
+  (cond
+    [(< x -1) -1]
+    [(<= x 300) (my-to-integer x)]
+    [else 0]
+  )
+)
+
+
 (set! scheme#ssdelay
   (lambda (x)
     (##core#inline "ssdelay" x)
@@ -1997,7 +2038,14 @@ EOF
 (set! scheme#set-pixel
   (lambda (x y r g b a)
 	(print "\n\nin setpixel\n\n")
-    (##core#inline "setpixel" x y r g b a)
+	(print x)
+	(print y)
+	(print r)
+	(print g)
+	(print b)
+	(print a)
+	(print "\n\nin setpixel OVER\n\n")
+    (##core#inline "setpixel" (mk-valid-pixel-xy x) (mk-valid-pixel-xy y) (mk-valid-pixel-xy r) (mk-valid-pixel-xy g) (mk-valid-pixel-xy b) (mk-valid-pixel-xy a))
   )
 )
 
